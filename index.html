@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stoneman Craft — Crafted By Hand</title>
+  <meta name="description" content="Stoneman Craft — artisan slow-fermentation sourdough, European pastries and handcrafted stone homeware in Portland, OR." />
+  <meta name="theme-color" content="#e27b28" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23e27b28'/%3E%3Ctext x='32' y='43' font-family='Georgia' font-size='30' font-weight='700' text-anchor='middle' fill='%232b211b'%3ESC%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: {
+              DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+              dark: 'rgb(var(--accent-dark) / <alpha-value>)',
+              light: 'rgb(var(--accent-light) / <alpha-value>)',
+            },
+            onaccent: 'rgb(var(--on-accent) / <alpha-value>)',
+            cream: '#fbf7f2',
+            sand: '#f3ebe1',
+            espresso: '#2b211b',
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 1px 2px rgba(43,33,27,.04), 0 8px 24px -8px rgba(43,33,27,.12)',
+            lift: '0 2px 4px rgba(43,33,27,.06), 0 20px 40px -12px rgba(43,33,27,.22)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      --accent: 226 123 40;
+      --accent-dark: 140 76 25;
+      --accent-light: 252 241 232;
+      --on-accent: 43 33 27;
+    }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; }
+    [x-cloak] { display: none !important; }
+    .page-enter { animation: pageIn .45s ease both; }
+    @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .toast-in { animation: toastIn .3s ease both; }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+    .grain {
+      background-image: radial-gradient(rgb(var(--accent) / .10) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+    :focus-visible { outline: 3px solid rgb(var(--accent)); outline-offset: 2px; border-radius: 10px; }
+    .drawer { transition: transform .3s ease; }
+    .backdrop { transition: opacity .3s ease; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-cream text-espresso font-sans min-h-screen flex flex-col">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] bg-espresso text-white px-4 py-3 rounded-xl">Skip to content</a>
+
+  <!-- Header (rendered by JS) -->
+  <header id="siteHeader" class="sticky top-0 z-40 bg-cream/90 backdrop-blur border-b border-espresso/10"></header>
+
+  <!-- Page content -->
+  <main id="main" tabindex="-1" class="flex-1 outline-none"></main>
+
+  <!-- Footer (rendered by JS) -->
+  <footer id="siteFooter" class="bg-espresso text-stone-300"></footer>
+
+  <!-- Floating customizer trigger -->
+  <button id="customizerFab" type="button" aria-controls="customizer" aria-expanded="false"
+    class="fixed bottom-5 left-5 z-40 min-h-[48px] inline-flex items-center gap-2 rounded-full bg-espresso text-white pl-4 pr-5 shadow-lift hover:bg-black transition">
+    <i class="fa-solid fa-sliders" aria-hidden="true"></i><span class="text-sm font-semibold">Customize</span>
+  </button>
+
+  <!-- Mobile navigation drawer -->
+  <div id="mobileNav" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="Site navigation">
+    <div class="backdrop absolute inset-0 bg-espresso/50 opacity-0" data-close="mobileNav"></div>
+    <div class="drawer absolute right-0 top-0 h-full w-[86%] max-w-sm bg-cream shadow-lift translate-x-full flex flex-col">
+      <div class="flex items-center justify-between p-5 border-b border-espresso/10">
+        <span class="font-serif text-xl font-semibold" data-bind="name"></span>
+        <button type="button" data-close="mobileNav" class="w-11 h-11 rounded-xl hover:bg-sand grid place-items-center" aria-label="Close menu"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
+      </div>
+      <nav id="mobileNavLinks" class="p-4 flex flex-col gap-1" aria-label="Mobile"></nav>
+      <div class="mt-auto p-5 border-t border-espresso/10 space-y-3" id="mobileNavFoot"></div>
+    </div>
+  </div>
+
+  <!-- Enquiry modal -->
+  <div id="enquiryModal" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="enquiryTitle">
+    <div class="backdrop absolute inset-0 bg-espresso/60 opacity-0" data-close="enquiryModal"></div>
+    <div class="relative min-h-full flex items-end sm:items-center justify-center p-0 sm:p-6">
+      <div class="drawer relative w-full sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl shadow-lift translate-y-8 opacity-0 max-h-[94vh] overflow-y-auto">
+        <div class="flex items-start justify-between gap-4 p-6 border-b border-espresso/10">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-widest text-accent-dark">Enquiry &amp; Quote</p>
+            <h2 id="enquiryTitle" class="font-serif text-2xl font-semibold mt-1">Request a quote</h2>
+            <p class="text-sm text-stone-600 mt-1">We reply within one business day.</p>
+          </div>
+          <button type="button" data-close="enquiryModal" class="w-11 h-11 shrink-0 rounded-xl hover:bg-sand grid place-items-center" aria-label="Close enquiry form"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
+        </div>
+        <form id="enquiryForm" class="p-6 space-y-4" novalidate>
+          <div>
+            <label for="eqItem" class="block text-sm font-medium mb-1.5">Product or service</label>
+            <select id="eqItem" name="item" class="w-full min-h-[44px] rounded-xl border border-stone-300 bg-white px-3 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none"></select>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="eqName" class="block text-sm font-medium mb-1.5">Full name <span class="text-red-700" aria-hidden="true">*</span></label>
+              <input id="eqName" name="name" required autocomplete="name" class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" />
+            </div>
+            <div>
+              <label for="eqPhone" class="block text-sm font-medium mb-1.5">Phone</label>
+              <input id="eqPhone" name="phone" type="tel" autocomplete="tel" class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" />
+            </div>
+          </div>
+          <div>
+            <label for="eqEmail" class="block text-sm font-medium mb-1.5">Email <span class="text-red-700" aria-hidden="true">*</span></label>
+            <input id="eqEmail" name="email" type="email" required autocomplete="email" class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" />
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="eqQty" class="block text-sm font-medium mb-1.5">Quantity / guests</label>
+              <input id="eqQty" name="qty" type="number" min="1" inputmode="numeric" class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" />
+            </div>
+            <div>
+              <label for="eqDate" class="block text-sm font-medium mb-1.5">Preferred date</label>
+              <input id="eqDate" name="date" type="date" class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" />
+            </div>
+          </div>
+          <div>
+            <label for="eqMsg" class="block text-sm font-medium mb-1.5">Message</label>
+            <textarea id="eqMsg" name="message" rows="3" class="w-full rounded-xl border border-stone-300 px-3 py-2.5 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" placeholder="Tell us about your order or event…"></textarea>
+          </div>
+          <p id="eqError" class="hidden text-sm text-red-700" role="alert"></p>
+          <button type="submit" class="w-full min-h-[48px] rounded-xl bg-accent text-onaccent font-semibold hover:brightness-95 shadow-soft transition inline-flex items-center justify-center gap-2">
+            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send enquiry
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed inset-0 z-[70] hidden" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="backdrop absolute inset-0 bg-black/90 opacity-0" data-close="lightbox"></div>
+    <div class="relative h-full flex flex-col items-center justify-center p-4 sm:p-10 pointer-events-none">
+      <figure class="drawer opacity-0 scale-95 max-w-5xl w-full pointer-events-auto">
+        <img id="lbImg" src="" alt="" class="mx-auto max-h-[76vh] w-auto rounded-2xl shadow-lift object-contain" />
+        <figcaption class="mt-4 text-center text-white">
+          <span id="lbTitle" class="font-serif text-xl"></span>
+          <span id="lbCount" class="block text-sm text-stone-300 mt-1"></span>
+        </figcaption>
+      </figure>
+    </div>
+    <button type="button" data-close="lightbox" class="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center" aria-label="Close image viewer"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
+    <button type="button" id="lbPrev" class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center" aria-label="Previous image"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+    <button type="button" id="lbNext" class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center" aria-label="Next image"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+  </div>
+
+  <!-- Customizer drawer -->
+  <div id="customizer" class="fixed inset-0 z-[55] hidden" role="dialog" aria-modal="true" aria-labelledby="custTitle">
+    <div class="backdrop absolute inset-0 bg-espresso/40 opacity-0" data-close="customizer"></div>
+    <aside class="drawer absolute left-0 top-0 h-full w-full max-w-md bg-white shadow-lift -translate-x-full flex flex-col">
+      <div class="flex items-center justify-between p-5 border-b border-espresso/10">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-widest text-accent-dark">Owner tools</p>
+          <h2 id="custTitle" class="font-serif text-2xl font-semibold">Live Customizer</h2>
+        </div>
+        <button type="button" data-close="customizer" class="w-11 h-11 rounded-xl hover:bg-sand grid place-items-center" aria-label="Close customizer"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
+      </div>
+      <div class="px-5 pt-4" role="tablist" aria-label="Customizer sections">
+        <div class="grid grid-cols-4 gap-1 bg-sand rounded-xl p-1 text-sm font-medium" id="custTabs">
+          <button type="button" role="tab" data-ctab="brand" class="min-h-[40px] rounded-lg">Brand</button>
+          <button type="button" role="tab" data-ctab="contact" class="min-h-[40px] rounded-lg">Contact</button>
+          <button type="button" role="tab" data-ctab="products" class="min-h-[40px] rounded-lg">Products</button>
+          <button type="button" role="tab" data-ctab="layout" class="min-h-[40px] rounded-lg">Layout</button>
+        </div>
+      </div>
+      <div class="flex-1 overflow-y-auto p-5" id="custBody"></div>
+      <div class="p-5 border-t border-espresso/10 flex gap-3">
+        <button type="button" id="custReset" class="flex-1 min-h-[44px] rounded-xl border border-stone-300 font-medium hover:bg-sand"><i class="fa-solid fa-rotate-left mr-2" aria-hidden="true"></i>Reset</button>
+        <button type="button" data-close="customizer" class="flex-1 min-h-[44px] rounded-xl bg-espresso text-white font-medium hover:bg-black">Done</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toasts" class="fixed z-[80] bottom-5 right-5 left-5 sm:left-auto flex flex-col gap-3 items-stretch sm:items-end pointer-events-none" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ------------------------------------------------------------------ *
+   *  Business configuration (editable live via the Customizer)          *
+   * ------------------------------------------------------------------ */
+  const IMG = (id, w = 900) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=75`;
+
+  const DEFAULTS = {
+    name: 'Stoneman Craft',
+    tagline: 'Crafted By Hand',
+    industry: 'Food & Beverage / Artisan Bakery',
+    description: 'Aura Artisan Bakery brings traditional slow-fermentation sourdough and authentic European breakfast treats to life using organic, local stone-milled grains.',
+    mission: 'Nourishing our local community through pure organic ingredients, zero preservatives, and timeless artisan baking practices.',
+    audience: ['Local food lovers', 'Wedding planners', 'Corporate event hosts', 'Coffee enthusiasts'],
+    accent: '#e27b28',
+    email: 'hello@aurabakery.com',
+    phone: '+1 (555) 382-9102',
+    address: '42 Baker Street, Historic District, Portland, OR 97201',
+    hours: [
+      ['Monday – Friday', '7:00 AM – 6:00 PM'],
+      ['Saturday', '8:00 AM – 5:00 PM'],
+      ['Sunday', '8:00 AM – 2:00 PM'],
+    ],
+    sections: { stats: true, products: true, why: true, services: true, cta: true },
+    products: [
+      {
+        id: 'p1', name: 'Signature Wild Sourdough Boule', category: 'Breads',
+        desc: '36-hour slow-fermented organic boule with crispy crust and airy open crumb.',
+        image: IMG('photo-1509440159596-0249088772ff'),
+        badges: ['Organic', 'Vegan', 'Bestseller'],
+        specs: [['Fermentation', '36 hours'], ['Flour', 'Stone-milled organic'], ['Weight', '~900 g'], ['Keeps', '4–5 days']],
+      },
+      {
+        id: 'p2', name: 'French Butter Croissant Box', category: 'Pastries',
+        desc: 'Golden flaky laminated pastries baked fresh every morning with European culture butter.',
+        image: IMG('photo-1555507036-ab1f4038808a'),
+        badges: ['Baked Daily', 'Vegetarian'],
+        specs: [['Box', '6 croissants'], ['Butter', 'European cultured'], ['Baked', 'Every morning'], ['Best', 'Same day']],
+      },
+      {
+        id: 'p3', name: 'Stone Base Bowl', category: 'Handcrafted Homeware',
+        desc: 'Hand-finished serving bowl set on a solid natural-stone base, paired with a polished silver spoon.',
+        image: IMG('photo-1610701596007-11502861dcfa'),
+        badges: ['Handmade', 'Includes Silver Spoon'],
+        specs: [['Base', 'Natural stone'], ['Includes', 'Silver spoon'], ['Finish', 'Hand-polished'], ['Care', 'Hand wash']],
+      },
+      {
+        id: 'p4', name: 'Wooden Flower Vase', category: 'Handcrafted Homeware',
+        desc: 'Wooden flower vase with a sturdy stone base — a warm, natural centrepiece for tables and counters.',
+        image: IMG('photo-1578500494198-246f612d3b3d'),
+        badges: ['Handmade', 'Gift Ready'],
+        specs: [['Body', 'Solid wood'], ['Base', 'Natural stone'], ['Finish', 'Natural oil'], ['Use', 'Fresh or dried']],
+      },
+    ],
+    services: [
+      {
+        id: 's1', name: 'Event & Wedding Cake Catering', icon: 'fa-cake-candles',
+        desc: 'Custom dessert bars and bespoke wedding cakes for special celebrations.',
+        image: IMG('photo-1535254973040-607b474cb50d'),
+        benefits: ['Complimentary tasting consultation', 'Bespoke tiered cakes & dessert bars', 'Delivery and on-site setup', 'Vegan & gluten-conscious options'],
+      },
+      {
+        id: 's2', name: 'Corporate Breakfast Delivery', icon: 'fa-mug-hot',
+        desc: 'Fresh coffee carafes and warm pastry boxes delivered directly to offices.',
+        image: IMG('photo-1495474472287-4d71bcdd2085'),
+        benefits: ['Fresh coffee carafes & warm pastry boxes', 'Delivered to your office before 9 AM', 'One-off or recurring weekly plans', 'Simple monthly invoicing'],
+      },
+    ],
+  };
+
+  const EXTRA_GALLERY = [
+    { src: IMG('photo-1517433670267-08bbd4be890f', 1400), title: 'Our bakery counter', cat: 'facilities' },
+    { src: IMG('photo-1568254183919-78a4f43a2877', 1400), title: 'Morning bake on the racks', cat: 'facilities' },
+    { src: IMG('photo-1501339847302-ac426a4a7cbb', 1400), title: 'The café space', cat: 'facilities' },
+    { src: IMG('photo-1535254973040-607b474cb50d', 1400), title: 'Bespoke wedding cake', cat: 'projects' },
+    { src: IMG('photo-1486427944299-d1955d23e34d', 1400), title: 'Celebration dessert bar', cat: 'projects' },
+    { src: IMG('photo-1495474472287-4d71bcdd2085', 1400), title: 'Corporate breakfast service', cat: 'projects' },
+    { src: IMG('photo-1549931319-a545dcf3bc73', 1400), title: 'Rustic loaves', cat: 'products' },
+  ];
+
+  const PRESETS = [
+    { name: 'Golden Crust', accent: '#e27b28' },
+    { name: 'Terracotta', accent: '#c2563a' },
+    { name: 'Sage Garden', accent: '#6b8e4e' },
+    { name: 'Blueberry', accent: '#4a5fa8' },
+    { name: 'River Stone', accent: '#7a6f66' },
+  ];
+
+  const STORE_KEY = 'stonemanCraftConfig.v1';
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+  let config = load();
+
+  function load() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORE_KEY));
+      if (saved && typeof saved === 'object') return { ...clone(DEFAULTS), ...saved, sections: { ...DEFAULTS.sections, ...(saved.sections || {}) } };
+    } catch (e) { /* storage unavailable */ }
+    return clone(DEFAULTS);
+  }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(config)); } catch (e) { /* ignore */ }
+  }
+
+  /* ------------------------------------------------------------------ *
+   *  Helpers                                                            *
+   * ------------------------------------------------------------------ */
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const tel = (p) => 'tel:' + String(p).replace(/[^\d+]/g, '');
+  const mapsLink = () => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(config.address);
+  const mapsEmbed = () => 'https://www.google.com/maps?q=' + encodeURIComponent(config.address) + '&output=embed';
+  const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+  function placeholder(label) {
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><rect width='800' height='600' fill='#f3ebe1'/><circle cx='400' cy='260' r='70' fill='none' stroke='#c9b8a6' stroke-width='10'/><text x='400' y='400' font-family='Georgia' font-size='34' text-anchor='middle' fill='#8a7666'>${String(label).replace(/[<&'"]/g, '')}</text></svg>`;
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+  const img = (src, alt, cls = '') =>
+    `<img src="${esc(src || placeholder(alt))}" alt="${esc(alt)}" loading="lazy" class="${cls}" onerror="this.onerror=null;this.src='${placeholder(alt).replace(/'/g, '%27')}'" />`;
+
+  function hexToRgb(hex) {
+    let h = String(hex).replace('#', '').trim();
+    if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+    const n = parseInt(h, 16);
+    if (Number.isNaN(n) || h.length !== 6) return [226, 123, 40];
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function luminance([r, g, b]) {
+    const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  }
+  function applyAccent() {
+    const rgb = hexToRgb(config.accent);
+    const dark = rgb.map((v) => Math.round(v * 0.62));
+    const light = rgb.map((v) => Math.round(v + (255 - v) * 0.9));
+    const root = document.documentElement.style;
+    root.setProperty('--accent', rgb.join(' '));
+    root.setProperty('--accent-dark', dark.join(' '));
+    root.setProperty('--accent-light', light.join(' '));
+    // pick text colour on accent backgrounds for best contrast
+    const L = luminance(rgb);
+    const contrastDark = (L + 0.05) / (luminance([43, 33, 27]) + 0.05);
+    const contrastWhite = 1.05 / (L + 0.05);
+    root.setProperty('--on-accent', contrastDark >= contrastWhite ? '43 33 27' : '255 255 255');
+    $('meta[name="theme-color"]').setAttribute('content', config.accent);
+  }
+
+  /* ------------------------------------------------------------------ *
+   *  Toasts                                                             *
+   * ------------------------------------------------------------------ */
+  function toast(title, msg = '', type = 'success') {
+    const icon = type === 'success' ? 'fa-circle-check text-green-700' : type === 'error' ? 'fa-circle-exclamation text-red-700' : 'fa-circle-info text-accent-dark';
+    const el = document.createElement('div');
+    el.className = 'toast-in pointer-events-auto w-full sm:w-96 bg-white rounded-2xl shadow-lift border border-espresso/10 p-4 flex gap-3 items-start';
+    el.innerHTML = `<i class="fa-solid ${icon} text-xl mt-0.5" aria-hidden="true"></i>
+      <div class="flex-1"><p class="font-semibold">${esc(title)}</p>${msg ? `<p class="text-sm text-stone-600 mt-0.5">${esc(msg)}</p>` : ''}</div>
+      <button type="button" class="w-9 h-9 -m-1 rounded-lg hover:bg-sand grid place-items-center" aria-label="Dismiss notification"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
+    const remove = () => { el.style.transition = 'opacity .25s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 250); };
+    el.querySelector('button').addEventListener('click', remove);
+    $('#toasts').appendChild(el);
+    setTimeout(remove, 5000);
+  }
+
+  /* ------------------------------------------------------------------ *
+   *  Overlay management (drawers, modal, lightbox) w/ focus trapping    *
+   * ------------------------------------------------------------------ */
+  const openStack = [];
+  function openOverlay(id, opener) {
+    const el = document.getElementById(id);
+    el.classList.remove('hidden');
+    el._opener = opener || document.activeElement;
+    openStack.push(id);
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      el.querySelector('.backdrop').classList.remove('opacity-0');
+      const d = el.querySelector('.drawer');
+      d.classList.remove('translate-x-full', '-translate-x-full', 'translate-y-8', 'opacity-0', 'scale-95');
+    });
+    if (id === 'customizer') $('#customizerFab').setAttribute('aria-expanded', 'true');
+    setTimeout(() => {
+      const f = el.querySelector('[data-autofocus]') || focusables(el)[0];
+      f && f.focus();
+    }, 60);
+  }
+  function closeOverlay(id) {
+    const el = document.getElementById(id);
+    if (!el || el.classList.contains('hidden')) return;
+    el.querySelector('.backdrop').classList.add('opacity-0');
+    const d = el.querySelector('.drawer');
+    if (id === 'mobileNav') d.classList.add('translate-x-full');
+    else if (id === 'customizer') d.classList.add('-translate-x-full');
+    else if (id === 'enquiryModal') d.classList.add('translate-y-8', 'opacity-0');
+    else d.classList.add('opacity-0', 'scale-95');
+    const idx = openStack.lastIndexOf(id);
+    if (idx > -1) openStack.splice(idx, 1);
+    if (id === 'customizer') $('#customizerFab').setAttribute('aria-expanded', 'false');
+    setTimeout(() => {
+      el.classList.add('hidden');
+      if (!openStack.length) document.body.style.overflow = '';
+      el._opener && document.contains(el._opener) && el._opener.focus();
+    }, 280);
+  }
+  const focusables = (root) => $$('a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])', root).filter((e) => e.offsetParent !== null || e === document.activeElement);
+
+  document.addEventListener('keydown', (e) => {
+    const top = openStack[openStack.length - 1];
+    if (!top) return;
+    const el = document.getElementById(top);
+    if (e.key === 'Escape') { e.preventDefault(); closeOverlay(top); return; }
+    if (top === 'lightbox' && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) { stepLightbox(e.key === 'ArrowRight' ? 1 : -1); return; }
+    if (e.key === 'Tab') {
+      const f = focusables(el);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ------------------------------------------------------------------ *
+   *  Shared UI fragments                                                *
+   * ------------------------------------------------------------------ */
+  const NAV = [
+    ['home', 'Home'], ['about', 'About'], ['products', 'Products'],
+    ['services', 'Services'], ['gallery', 'Gallery'], ['contact', 'Contact'],
+  ];
+
+  const btnPrimary = 'inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-xl bg-accent text-onaccent font-semibold shadow-soft hover:shadow-lift hover:brightness-95 transition';
+  const btnGhost = 'inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-xl border border-espresso/20 bg-white/70 font-semibold hover:bg-white hover:border-espresso/40 transition';
+
+  const logo = (size = 'w-11 h-11 text-lg') =>
+    `<span class="${size} rounded-xl bg-accent text-onaccent grid place-items-center shadow-soft" aria-hidden="true"><i class="fa-solid fa-wheat-awn"></i></span>`;
+
+  const eyebrow = (t) => `<p class="text-xs font-semibold uppercase tracking-[.2em] text-accent-dark">${esc(t)}</p>`;
+  const sectionHead = (eb, title, sub = '', center = true) => `
+    <div class="${center ? 'text-center mx-auto' : ''} max-w-2xl mb-10 sm:mb-12">
+      ${eyebrow(eb)}
+      <h2 class="font-serif text-3xl sm:text-4xl font-semibold mt-3 leading-tight">${title}</h2>
+      ${sub ? `<p class="text-stone-600 mt-4 text-lg leading-relaxed">${sub}</p>` : ''}
+    </div>`;
+
+  const pageHero = (eb, title, sub) => `
+    <section class="relative overflow-hidden bg-sand">
+      <div class="grain absolute inset-0 opacity-70" aria-hidden="true"></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center">
+        ${eyebrow(eb)}
+        <h1 class="font-serif text-4xl sm:text-5xl font-semibold mt-3">${title}</h1>
+        <p class="text-stone-600 mt-4 text-lg max-w-2xl mx-auto">${sub}</p>
+      </div>
+    </section>`;
+
+  function productCard(p, detailed = false) {
+    return `
+    <article class="group bg-white rounded-2xl shadow-soft hover:shadow-lift transition overflow-hidden flex flex-col border border-espresso/5" data-cat="${esc(p.category)}">
+      <div class="relative aspect-[4/3] overflow-hidden bg-sand">
+        ${img(p.image, p.name, 'w-full h-full object-cover group-hover:scale-105 transition duration-500')}
+        <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+          ${(p.badges || []).slice(0, detailed ? 4 : 2).map((b, i) => `<span class="text-xs font-semibold px-2.5 py-1 rounded-full ${i === 0 ? 'bg-accent text-onaccent' : 'bg-white/95 text-espresso'} shadow-sm">${esc(b)}</span>`).join('')}
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-1">
+        <p class="text-xs font-semibold uppercase tracking-widest text-accent-dark">${esc(p.category)}</p>
+        <h3 class="font-serif text-xl font-semibold mt-1.5">${esc(p.name)}</h3>
+        <p class="text-stone-600 mt-2 leading-relaxed">${esc(p.desc)}</p>
+        ${detailed && p.specs && p.specs.length ? `
+        <dl class="grid grid-cols-2 gap-x-4 gap-y-3 mt-5 pt-5 border-t border-espresso/10 text-sm">
+          ${p.specs.map(([k, v]) => `<div><dt class="text-stone-500">${esc(k)}</dt><dd class="font-medium">${esc(v)}</dd></div>`).join('')}
+        </dl>` : ''}
+        <div class="mt-auto pt-6">
+          <button type="button" data-enquire="${esc(p.name)}" class="${btnPrimary} w-full">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i> ${detailed ? 'Enquire / Request Quote' : 'Enquire'}
+          </button>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function serviceCard(s, full = false) {
+    return `
+    <article class="bg-white rounded-2xl shadow-soft overflow-hidden grid ${full ? 'lg:grid-cols-2' : 'md:grid-cols-5'} border border-espresso/5">
+      <div class="${full ? '' : 'md:col-span-2'} relative min-h-[220px] bg-sand">
+        ${img(s.image, s.name, 'absolute inset-0 w-full h-full object-cover')}
+      </div>
+      <div class="${full ? '' : 'md:col-span-3'} p-6 sm:p-8 flex flex-col">
+        <span class="w-12 h-12 rounded-xl bg-accent-light text-accent-dark grid place-items-center text-xl" aria-hidden="true"><i class="fa-solid ${esc(s.icon)}"></i></span>
+        <h3 class="font-serif text-2xl font-semibold mt-4">${esc(s.name)}</h3>
+        <p class="text-stone-600 mt-2 leading-relaxed">${esc(s.desc)}</p>
+        <ul class="mt-5 space-y-2.5">
+          ${s.benefits.map((b) => `<li class="flex gap-3"><i class="fa-solid fa-circle-check text-accent mt-1" aria-hidden="true"></i><span>${esc(b)}</span></li>`).join('')}
+        </ul>
+        <div class="mt-auto pt-7 flex flex-wrap gap-3">
+          <button type="button" data-enquire="${esc(s.name)}" class="${btnPrimary}"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Enquire Now</button>
+          ${full ? '' : `<a href="#/services" class="${btnGhost}">Learn more</a>`}
+        </div>
+      </div>
+    </article>`;
+  }
+
+  /* ------------------------------------------------------------------ *
+   *  Pages                                                              *
+   * ------------------------------------------------------------------ */
+  function renderHome() {
+    const s = config.sections;
+    const hero = config.products[0] || {};
+    const second = config.products[1] || {};
+    return `
+    <!-- Hero -->
+    <section class="relative overflow-hidden">
+      <div class="grain absolute inset-0 opacity-60" aria-hidden="true"></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="inline-flex items-center gap-2 rounded-full bg-white shadow-soft px-4 py-2 text-sm font-medium">
+            <i class="fa-solid fa-leaf text-accent" aria-hidden="true"></i> ${esc(config.industry)}
+          </span>
+          <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-semibold leading-[1.05] mt-6">
+            ${esc(config.tagline)}<span class="text-accent">.</span>
+          </h1>
+          <p class="mt-3 font-serif italic text-2xl text-accent-dark">${esc(config.name)}</p>
+          <p class="mt-6 text-lg text-stone-700 leading-relaxed max-w-xl">${esc(config.description)}</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#/products" class="${btnPrimary}">Explore Products <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            <button type="button" data-enquire="" class="${btnGhost}"><i class="fa-regular fa-envelope" aria-hidden="true"></i> Request a Quote</button>
+          </div>
+          <a href="${tel(config.phone)}" class="mt-6 inline-flex items-center gap-3 min-h-[44px] text-stone-700 hover:text-accent-dark">
+            <span class="w-10 h-10 rounded-full bg-white shadow-soft grid place-items-center"><i class="fa-solid fa-phone text-accent-dark" aria-hidden="true"></i></span>
+            <span>Call us: <strong>${esc(config.phone)}</strong></span>
+          </a>
+        </div>
+        <div class="relative">
+          <div class="grid grid-cols-5 grid-rows-6 gap-4 h-[420px] sm:h-[520px]">
+            <div class="col-span-3 row-span-6 rounded-2xl overflow-hidden shadow-lift bg-sand">${img(hero.image, hero.name || config.name, 'w-full h-full object-cover')}</div>
+            <div class="col-span-2 row-span-3 rounded-2xl overflow-hidden shadow-soft bg-sand">${img(second.image, second.name || config.name, 'w-full h-full object-cover')}</div>
+            <div class="col-span-2 row-span-3 rounded-2xl bg-accent text-onaccent p-5 flex flex-col justify-end shadow-soft">
+              <i class="fa-solid fa-wheat-awn text-3xl opacity-80" aria-hidden="true"></i>
+              <p class="font-serif text-2xl font-semibold mt-3 leading-tight">Stone-milled. Slow-fermented.</p>
+            </div>
+          </div>
+          <div class="absolute -bottom-5 left-4 sm:-left-6 bg-white rounded-2xl shadow-lift px-5 py-4 flex items-center gap-3">
+            <span class="w-11 h-11 rounded-full bg-accent-light text-accent-dark grid place-items-center" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+            <div><p class="font-semibold">Baked fresh daily</p><p class="text-sm text-stone-600">Ovens on from dawn</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    ${s.stats ? `
+    <!-- Stats -->
+    <section aria-label="Key highlights" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        ${[
+          ['fa-hourglass-half', '36h', 'Slow fermentation'],
+          ['fa-seedling', '100%', 'Organic stone-milled grain'],
+          ['fa-ban', '0', 'Preservatives, ever'],
+          ['fa-hand-sparkles', String(config.products.length), 'Handcrafted products'],
+        ].map(([ic, n, l]) => `
+          <div class="bg-white rounded-2xl shadow-soft p-6 border border-espresso/5">
+            <i class="fa-solid ${ic} text-accent text-xl" aria-hidden="true"></i>
+            <p class="font-serif text-4xl font-semibold mt-3">${n}</p>
+            <p class="text-stone-600 mt-1">${l}</p>
+          </div>`).join('')}
+      </div>
+    </section>` : ''}
+
+    ${s.products ? `
+    <!-- Featured products -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-10">
+        <div class="max-w-2xl">
+          ${eyebrow('Featured products')}
+          <h2 class="font-serif text-3xl sm:text-4xl font-semibold mt-3">From our ovens &amp; workshop</h2>
+        </div>
+        <a href="#/products" class="${btnGhost}">View all products <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        ${config.products.slice(0, 4).map((p) => productCard(p)).join('')}
+      </div>
+    </section>` : ''}
+
+    ${s.why ? `
+    <!-- Why choose us -->
+    <section class="bg-sand">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        ${sectionHead('Why choose us', `Why people choose ${esc(config.name)}`, esc(config.mission))}
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          ${WHY.map(([ic, t, d]) => `
+            <div class="bg-white rounded-2xl p-7 shadow-soft hover:-translate-y-1 hover:shadow-lift transition">
+              <span class="w-12 h-12 rounded-xl bg-accent-light text-accent-dark grid place-items-center text-xl" aria-hidden="true"><i class="fa-solid ${ic}"></i></span>
+              <h3 class="font-semibold text-lg mt-5">${t}</h3>
+              <p class="text-stone-600 mt-2 leading-relaxed">${d}</p>
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>` : ''}
+
+    ${s.services ? `
+    <!-- Services -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      ${sectionHead('Our services', 'Catering & delivery, made by hand', 'From wedding celebrations to Monday-morning meetings, we bring the bakery to you.')}
+      <div class="grid gap-8">${config.services.map((sv) => serviceCard(sv)).join('')}</div>
+    </section>` : ''}
+
+    ${s.cta ? ctaBanner() : ''}
+    `;
+  }
+
+  const WHY = [
+    ['fa-wheat-awn', 'Stone-milled local grain', 'Organic grain from regional farms, milled slowly on stone to keep flavour and nutrients intact.'],
+    ['fa-hourglass-half', 'Patient fermentation', 'Our 36-hour wild ferment builds deep flavour and makes bread easier to digest.'],
+    ['fa-leaf', 'Zero preservatives', 'Just flour, water, salt, butter and time. Nothing artificial — ever.'],
+    ['fa-hands', 'Handmade every day', 'Every loaf is shaped, scored and baked by hand by our team of artisans.'],
+    ['fa-champagne-glasses', 'Event-ready team', 'Wedding planners and event hosts trust us for bespoke cakes and dessert bars.'],
+    ['fa-truck-fast', 'Reliable delivery', 'Warm pastry boxes and coffee carafes delivered to offices, on time.'],
+  ];
+
+  function ctaBanner() {
+    return `
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div class="relative overflow-hidden rounded-2xl bg-espresso text-white px-6 py-12 sm:px-12 sm:py-14 shadow-lift">
+        <div class="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-accent/30 blur-2xl" aria-hidden="true"></div>
+        <div class="relative grid lg:grid-cols-3 gap-8 items-center">
+          <div class="lg:col-span-2">
+            <h2 class="font-serif text-3xl sm:text-4xl font-semibold">Planning an event or a team breakfast?</h2>
+            <p class="text-stone-300 mt-3 text-lg">Talk to us about custom orders, wedding cakes and corporate delivery. We'd love to bake for you.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row lg:flex-col gap-3">
+            <a href="${tel(config.phone)}" class="${btnPrimary}"><i class="fa-solid fa-phone" aria-hidden="true"></i> ${esc(config.phone)}</a>
+            <button type="button" data-enquire="" class="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-xl border border-white/30 font-semibold hover:bg-white/10 transition"><i class="fa-regular fa-envelope" aria-hidden="true"></i> Send an enquiry</button>
+          </div>
+        </div>
+      </div>
+    </section>`;
+  }
+
+  function renderAbout() {
+    const values = [
+      ['fa-seedling', 'Purity', 'Organic ingredients and nothing we can’t pronounce.'],
+      ['fa-clock', 'Patience', 'Time is our most important ingredient.'],
+      ['fa-people-group', 'Community', 'Local farmers, local customers, local pride.'],
+      ['fa-hammer', 'Craft', 'Traditional techniques, practiced every single day.'],
+    ];
+    const strengths = [
+      ['fa-bread-slice', 'Master bakers', 'Years of experience with natural leaven and long fermentation.'],
+      ['fa-cake-candles', 'Pastry & cake artists', 'Laminated doughs, bespoke celebration cakes and dessert bars.'],
+      ['fa-gem', 'Stone & wood makers', 'Hand-finished homeware with natural stone bases.'],
+      ['fa-clipboard-list', 'Event coordinators', 'Friendly planning support for weddings and corporate hosts.'],
+    ];
+    return `
+    ${pageHero('About us', `The story of ${esc(config.name)}`, esc(config.tagline) + ' — since our very first loaf.')}
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 grid lg:grid-cols-2 gap-12 items-center">
+      <div class="relative">
+        <div class="rounded-2xl overflow-hidden shadow-lift aspect-[4/5] bg-sand">${img(EXTRA_GALLERY[0].src, 'Inside the bakery', 'w-full h-full object-cover')}</div>
+        <div class="absolute -bottom-6 -right-2 sm:-right-6 bg-accent text-onaccent rounded-2xl p-6 shadow-lift max-w-[220px]">
+          <p class="font-serif text-4xl font-semibold">36h</p>
+          <p class="text-sm font-medium mt-1">of patience in every sourdough boule</p>
+        </div>
+      </div>
+      <div>
+        ${eyebrow('Our story')}
+        <h2 class="font-serif text-3xl sm:text-4xl font-semibold mt-3">Bread, pastry &amp; stonework — ${esc(config.tagline.toLowerCase())}</h2>
+        <div class="mt-6 space-y-4 text-lg text-stone-700 leading-relaxed">
+          <p>${esc(config.description)}</p>
+          <p>${esc(config.name)} began with a simple belief: the best food is made slowly, with good ingredients and skilled hands. From our home at ${esc(config.address)}, we bake every morning for neighbours, cafés and celebrations across the city.</p>
+          <p>That same hands-on philosophy extends to our workshop, where we finish stone-based bowls and wooden vases that bring the warmth of the bakery to your table.</p>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-2">
+          ${config.audience.map((a) => `<span class="px-3 py-1.5 rounded-full bg-white shadow-soft text-sm font-medium">${esc(a)}</span>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-espresso text-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center">
+        <i class="fa-solid fa-quote-left text-3xl text-accent" aria-hidden="true"></i>
+        <p class="text-xs font-semibold uppercase tracking-[.2em] text-accent mt-6">Our mission</p>
+        <p class="font-serif text-2xl sm:text-3xl leading-snug mt-4">${esc(config.mission)}</p>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      ${sectionHead('Core values', 'What we stand for')}
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        ${values.map(([ic, t, d]) => `
+          <div class="bg-white rounded-2xl p-7 shadow-soft text-center border border-espresso/5">
+            <span class="mx-auto w-14 h-14 rounded-2xl bg-accent-light text-accent-dark grid place-items-center text-2xl" aria-hidden="true"><i class="fa-solid ${ic}"></i></span>
+            <h3 class="font-semibold text-lg mt-5">${t}</h3>
+            <p class="text-stone-600 mt-2">${d}</p>
+          </div>`).join('')}
+      </div>
+    </section>
+
+    <section class="bg-sand">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 grid lg:grid-cols-2 gap-12">
+        <div>
+          ${eyebrow('Competitive advantages')}
+          <h2 class="font-serif text-3xl sm:text-4xl font-semibold mt-3">What sets us apart</h2>
+          <ul class="mt-8 space-y-5">
+            ${WHY.slice(0, 5).map(([ic, t, d]) => `
+              <li class="flex gap-4">
+                <span class="w-11 h-11 shrink-0 rounded-xl bg-white text-accent-dark grid place-items-center shadow-soft" aria-hidden="true"><i class="fa-solid ${ic}"></i></span>
+                <div><p class="font-semibold">${t}</p><p class="text-stone-600">${d}</p></div>
+              </li>`).join('')}
+          </ul>
+        </div>
+        <div>
+          ${eyebrow('Team strengths')}
+          <h2 class="font-serif text-3xl sm:text-4xl font-semibold mt-3">The hands behind the craft</h2>
+          <div class="grid sm:grid-cols-2 gap-5 mt-8">
+            ${strengths.map(([ic, t, d]) => `
+              <div class="bg-white rounded-2xl p-6 shadow-soft">
+                <i class="fa-solid ${ic} text-accent text-2xl" aria-hidden="true"></i>
+                <h3 class="font-semibold mt-4">${t}</h3>
+                <p class="text-stone-600 text-sm mt-1.5">${d}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </section>
+    ${ctaBanner().replace('pb-20', 'py-20')}`;
+  }
+
+  let productFilter = 'All';
+  function renderProducts() {
+    const cats = ['All', ...new Set(config.products.map((p) => p.category))];
+    if (!cats.includes(productFilter)) productFilter = 'All';
+    const list = config.products.filter((p) => productFilter === 'All' || p.category === productFilter);
+    return `
+    ${pageHero('Products', 'Our handcrafted collection', 'Slow-fermented breads, morning pastries and hand-finished homeware — each made with care.')}
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="flex flex-wrap gap-2 justify-center mb-10" role="group" aria-label="Filter products by category">
+        ${cats.map((c) => `
+          <button type="button" data-pfilter="${esc(c)}" aria-pressed="${c === productFilter}"
+            class="min-h-[44px] px-5 rounded-full font-medium border transition ${c === productFilter ? 'bg-espresso text-white border-espresso' : 'bg-white border-espresso/15 hover:border-espresso/40'}">
+            ${esc(c)} <span class="ml-1 text-xs opacity-70">${c === 'All' ? config.products.length : config.products.filter((p) => p.category === c).length}</span>
+          </button>`).join('')}
+      </div>
+      ${list.length ? `<div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">${list.map((p) => productCard(p, true)).join('')}</div>`
+        : `<p class="text-center text-stone-600 py-16">No products yet — add some from the <strong>Customizer</strong>.</p>`}
+    </section>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div class="rounded-2xl bg-accent-light border border-accent/20 p-8 sm:p-10 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+        <div>
+          <h2 class="font-serif text-2xl font-semibold">Need a wholesale or bulk order?</h2>
+          <p class="text-stone-700 mt-2">Cafés, restaurants and retailers — ask about standing orders and trade pricing.</p>
+        </div>
+        <button type="button" data-enquire="Wholesale / bulk order" class="${btnPrimary} shrink-0">Request a quote</button>
+      </div>
+    </section>`;
+  }
+
+  function renderServices() {
+    const steps = [
+      ['fa-comments', 'Tell us your plans', 'Share your date, guest count or office size.'],
+      ['fa-utensils', 'Taste & tailor', 'We suggest a menu and arrange a tasting if needed.'],
+      ['fa-truck', 'We deliver', 'Freshly baked, carefully packed and on time.'],
+    ];
+    return `
+    ${pageHero('Services', 'Catering &amp; delivery services', 'Bespoke celebration cakes and fresh corporate breakfasts — handmade by ' + esc(config.name) + '.')}
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid gap-10">
+      ${config.services.map((s) => serviceCard(s, true)).join('')}
+    </section>
+    <section class="bg-sand">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        ${sectionHead('How it works', 'Simple from enquiry to delivery')}
+        <ol class="grid md:grid-cols-3 gap-6">
+          ${steps.map(([ic, t, d], i) => `
+            <li class="bg-white rounded-2xl p-7 shadow-soft relative">
+              <span class="absolute top-6 right-6 font-serif text-5xl text-accent/25 font-semibold" aria-hidden="true">0${i + 1}</span>
+              <i class="fa-solid ${ic} text-accent text-2xl" aria-hidden="true"></i>
+              <h3 class="font-semibold text-lg mt-4">${t}</h3>
+              <p class="text-stone-600 mt-1.5">${d}</p>
+            </li>`).join('')}
+        </ol>
+      </div>
+    </section>
+    ${ctaBanner().replace('pb-20', 'py-20')}`;
+  }
+
+  let galleryFilter = 'all';
+  let galleryList = [];
+  function galleryItems() {
+    return [
+      ...config.products.map((p) => ({ src: p.image, title: p.name, cat: 'products' })),
+      ...EXTRA_GALLERY,
+    ];
+  }
+  function renderGallery() {
+    const cats = [['all', 'All'], ['products', 'Products'], ['facilities', 'Facilities'], ['projects', 'Projects']];
+    galleryList = galleryItems().filter((g) => galleryFilter === 'all' || g.cat === galleryFilter);
+    return `
+    ${pageHero('Gallery', 'A look inside our craft', 'Products, our bakery facilities and recent event projects. Tap any image to zoom.')}
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 pb-20">
+      <div class="flex flex-wrap gap-2 justify-center mb-10" role="group" aria-label="Filter gallery">
+        ${cats.map(([k, l]) => `
+          <button type="button" data-gfilter="${k}" aria-pressed="${k === galleryFilter}"
+            class="min-h-[44px] px-5 rounded-full font-medium border transition ${k === galleryFilter ? 'bg-espresso text-white border-espresso' : 'bg-white border-espresso/15 hover:border-espresso/40'}">${l}</button>`).join('')}
+      </div>
+      <div class="columns-1 sm:columns-2 lg:columns-3 gap-5 [&>*]:mb-5">
+        ${galleryList.map((g, i) => `
+          <button type="button" data-lightbox="${i}" class="group relative block w-full overflow-hidden rounded-2xl shadow-soft hover:shadow-lift transition break-inside-avoid bg-sand" aria-label="Open image: ${esc(g.title)}">
+            ${img(g.src, g.title, `w-full ${['aspect-[4/3]', 'aspect-[3/4]', 'aspect-square'][i % 3]} object-cover group-hover:scale-105 transition duration-500`)}
+            <span class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent opacity-90"></span>
+            <span class="absolute bottom-0 left-0 right-0 p-4 text-left text-white flex items-end justify-between gap-3">
+              <span><span class="block text-xs uppercase tracking-widest opacity-80">${esc(g.cat)}</span><span class="font-semibold">${esc(g.title)}</span></span>
+              <span class="w-10 h-10 rounded-full bg-white/20 backdrop-blur grid place-items-center shrink-0"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></span>
+            </span>
+          </button>`).join('')}
+      </div>
+    </section>`;
+  }
+
+  function renderContact() {
+    const cards = [
+      ['fa-location-dot', 'Visit us', esc(config.address), mapsLink(), 'Get directions', true],
+      ['fa-phone', 'Call us', esc(config.phone), tel(config.phone), 'Call now', false],
+      ['fa-envelope', 'Email us', esc(config.email), 'mailto:' + config.email, 'Send email', false],
+    ];
+    return `
+    ${pageHero('Contact', `Get in touch with ${esc(config.name)}`, 'Orders, events, corporate delivery or just a question — we’d love to hear from you.')}
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid md:grid-cols-3 gap-6">
+        ${cards.map(([ic, t, v, href, cta, ext]) => `
+          <div class="bg-white rounded-2xl p-7 shadow-soft border border-espresso/5 flex flex-col">
+            <span class="w-12 h-12 rounded-xl bg-accent-light text-accent-dark grid place-items-center text-xl" aria-hidden="true"><i class="fa-solid ${ic}"></i></span>
+            <h2 class="font-semibold text-lg mt-5">${t}</h2>
+            <p class="text-stone-700 mt-1 break-words">${v}</p>
+            <a href="${esc(href)}" ${ext ? 'target="_blank" rel="noopener"' : ''} class="mt-auto pt-5 inline-flex items-center gap-2 min-h-[44px] font-semibold text-accent-dark hover:underline">${cta} <i class="fa-solid fa-arrow-right text-sm" aria-hidden="true"></i></a>
+          </div>`).join('')}
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 grid lg:grid-cols-5 gap-8">
+      <div class="lg:col-span-3 bg-white rounded-2xl shadow-soft p-6 sm:p-10 border border-espresso/5">
+        ${eyebrow('Enquiry form')}
+        <h2 class="font-serif text-3xl font-semibold mt-2">Send us a message</h2>
+        <form id="contactForm" class="mt-8 grid sm:grid-cols-2 gap-5" novalidate>
+          <div>
+            <label for="cName" class="block text-sm font-medium mb-1.5">Name <span class="text-red-700" aria-hidden="true">*</span></label>
+            <input id="cName" name="name" required autocomplete="name" class="w-full min-h-[48px] rounded-xl border border-stone-300 px-4 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" />
+          </div>
+          <div>
+            <label for="cEmail" class="block text-sm font-medium mb-1.5">Email <span class="text-red-700" aria-hidden="true">*</span></label>
+            <input id="cEmail" name="email" type="email" required autocomplete="email" class="w-full min-h-[48px] rounded-xl border border-stone-300 px-4 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" />
+          </div>
+          <div class="sm:col-span-2">
+            <label for="cPhone" class="block text-sm font-medium mb-1.5">Phone</label>
+            <input id="cPhone" name="phone" type="tel" autocomplete="tel" class="w-full min-h-[48px] rounded-xl border border-stone-300 px-4 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" />
+          </div>
+          <div class="sm:col-span-2">
+            <label for="cMsg" class="block text-sm font-medium mb-1.5">Message <span class="text-red-700" aria-hidden="true">*</span></label>
+            <textarea id="cMsg" name="message" rows="5" required class="w-full rounded-xl border border-stone-300 px-4 py-3 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none" placeholder="How can we help?"></textarea>
+          </div>
+          <p id="cError" class="hidden sm:col-span-2 text-sm text-red-700" role="alert"></p>
+          <div class="sm:col-span-2">
+            <button type="submit" class="${btnPrimary} w-full sm:w-auto"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send message</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        <div class="bg-white rounded-2xl shadow-soft overflow-hidden border border-espresso/5">
+          <div class="aspect-[4/3] bg-sand">
+            <iframe title="Map showing ${esc(config.address)}" src="${esc(mapsEmbed())}" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <div class="p-6">
+            <h2 class="font-semibold text-lg">Our location</h2>
+            <p class="text-stone-600 mt-1">${esc(config.address)}</p>
+            <a href="${esc(mapsLink())}" target="_blank" rel="noopener" class="${btnPrimary} w-full mt-5"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Open in Google Maps</a>
+          </div>
+        </div>
+        <div class="bg-espresso text-white rounded-2xl p-6 shadow-soft">
+          <h2 class="font-semibold text-lg flex items-center gap-2"><i class="fa-regular fa-clock text-accent" aria-hidden="true"></i> Opening hours</h2>
+          <dl class="mt-4 space-y-2">${hoursList('text-stone-300')}</dl>
+        </div>
+      </div>
+    </section>`;
+  }
+
+  const hoursList = (muted) => config.hours.map(([d, h]) => `<div class="flex justify-between gap-4"><dt class="${muted}">${esc(d)}</dt><dd class="font-medium text-right">${esc(h)}</dd></div>`).join('');
+
+  const PAGES = {
+    home: { title: 'Home', render: renderHome },
+    about: { title: 'About Us', render: renderAbout },
+    products: { title: 'Products', render: renderProducts },
+    services: { title: 'Services', render: renderServices },
+    gallery: { title: 'Gallery', render: renderGallery },
+    contact: { title: 'Contact Us', render: renderContact },
+  };
+  const currentPage = () => { const h = location.hash.replace(/^#\/?/, '').split('?')[0]; return PAGES[h] ? h : 'home'; };
+
+  /* ------------------------------------------------------------------ *
+   *  Header & footer                                                    *
+   * ------------------------------------------------------------------ */
+  function renderHeader() {
+    const page = currentPage();
+    $('#siteHeader').innerHTML = `
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        <a href="#/home" class="flex items-center gap-3 min-h-[44px]" aria-label="${esc(config.name)} home">
+          ${logo()}
+          <span class="leading-tight">
+            <span class="block font-serif text-xl font-semibold">${esc(config.name)}</span>
+            <span class="block text-xs text-stone-600 tracking-wide">${esc(config.tagline)}</span>
+          </span>
+        </a>
+        <nav class="hidden lg:flex items-center gap-1" aria-label="Primary">
+          ${NAV.map(([k, l]) => `<a href="#/${k}" ${k === page ? 'aria-current="page"' : ''} class="px-4 min-h-[44px] inline-flex items-center rounded-xl font-medium transition ${k === page ? 'bg-accent-light text-accent-dark' : 'hover:bg-sand'}">${l}</a>`).join('')}
+        </nav>
+        <div class="flex items-center gap-2">
+          <a href="${tel(config.phone)}" class="hidden xl:inline-flex items-center gap-2 px-3 min-h-[44px] text-sm font-medium hover:text-accent-dark"><i class="fa-solid fa-phone" aria-hidden="true"></i>${esc(config.phone)}</a>
+          <button type="button" data-enquire="" class="hidden sm:inline-flex ${btnPrimary} !min-h-[44px] !px-5">Order / Enquire</button>
+          <button type="button" id="menuBtn" class="lg:hidden w-12 h-12 rounded-xl hover:bg-sand grid place-items-center" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false"><i class="fa-solid fa-bars text-xl" aria-hidden="true"></i></button>
+        </div>
+      </div>`;
+
+    $$('[data-bind="name"]').forEach((el) => (el.textContent = config.name));
+    $('#mobileNavLinks').innerHTML = NAV.map(([k, l]) => `<a href="#/${k}" ${k === page ? 'aria-current="page"' : ''} class="px-4 min-h-[52px] flex items-center justify-between rounded-xl text-lg font-medium ${k === page ? 'bg-accent-light text-accent-dark' : 'hover:bg-sand'}">${l}<i class="fa-solid fa-chevron-right text-sm opacity-50" aria-hidden="true"></i></a>`).join('');
+    $('#mobileNavFoot').innerHTML = `
+      <button type="button" data-enquire="" class="${btnPrimary} w-full">Order / Enquire</button>
+      <a href="${tel(config.phone)}" class="${btnGhost} w-full"><i class="fa-solid fa-phone" aria-hidden="true"></i> ${esc(config.phone)}</a>`;
+  }
+
+  function renderFooter() {
+    $('#siteFooter').innerHTML = `
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 sm:pb-10">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-12 gap-10">
+          <div class="lg:col-span-4">
+            <a href="#/home" class="flex items-center gap-3">${logo()}<span class="font-serif text-2xl font-semibold text-white">${esc(config.name)}</span></a>
+            <p class="mt-2 font-serif italic text-accent">${esc(config.tagline)}</p>
+            <p class="mt-4 leading-relaxed text-stone-400">${esc(config.mission)}</p>
+          </div>
+          <nav class="lg:col-span-2" aria-label="Footer">
+            <h2 class="text-white font-semibold">Explore</h2>
+            <ul class="mt-4 space-y-1">${NAV.map(([k, l]) => `<li><a href="#/${k}" class="inline-flex min-h-[40px] items-center hover:text-white">${l}</a></li>`).join('')}</ul>
+          </nav>
+          <div class="lg:col-span-3">
+            <h2 class="text-white font-semibold">Services</h2>
+            <ul class="mt-4 space-y-1">${config.services.map((s) => `<li><a href="#/services" class="inline-flex min-h-[40px] items-center hover:text-white">${esc(s.name)}</a></li>`).join('')}</ul>
+            <h2 class="text-white font-semibold mt-6">Hours</h2>
+            <dl class="mt-3 space-y-1.5 text-sm">${hoursList('text-stone-400')}</dl>
+          </div>
+          <div class="lg:col-span-3">
+            <h2 class="text-white font-semibold">Contact</h2>
+            <ul class="mt-4 space-y-3">
+              <li><a href="${esc(mapsLink())}" target="_blank" rel="noopener" class="flex gap-3 hover:text-white"><i class="fa-solid fa-location-dot text-accent mt-1" aria-hidden="true"></i><span>${esc(config.address)}</span></a></li>
+              <li><a href="${tel(config.phone)}" class="flex gap-3 items-center min-h-[40px] hover:text-white"><i class="fa-solid fa-phone text-accent" aria-hidden="true"></i>${esc(config.phone)}</a></li>
+              <li><a href="mailto:${esc(config.email)}" class="flex gap-3 items-center min-h-[40px] hover:text-white break-all"><i class="fa-solid fa-envelope text-accent" aria-hidden="true"></i>${esc(config.email)}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row gap-3 justify-between text-sm text-stone-400">
+          <p>&copy; ${new Date().getFullYear()} ${esc(config.name)}. All rights reserved.</p>
+          <p>${esc(config.industry)} · Portland, Oregon</p>
+        </div>
+      </div>`;
+  }
+
+  /* ------------------------------------------------------------------ *
+   *  Render / routing                                                   *
+   * ------------------------------------------------------------------ */
+  function render({ focus = false, animate = true } = {}) {
+    applyAccent();
+    renderHeader();
+    renderFooter();
+    const page = currentPage();
+    const main = $('#main');
+    main.innerHTML = `<div class="${animate ? 'page-enter' : ''}">${PAGES[page].render()}</div>`;
+    document.title = `${PAGES[page].title} — ${config.name} · ${config.tagline}`;
+    if (focus) main.focus({ preventScroll: true });
+  }
+
+  window.addEventListener('hashchange', () => {
+    closeOverlay('mobileNav');
+    render({ focus: true });
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  });
+
+  /* ------------------------------------------------------------------ *
+   *  Global click delegation                                            *
+   * ------------------------------------------------------------------ */
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-close],[data-enquire],[data-pfilter],[data-gfilter],[data-lightbox],#menuBtn,#customizerFab,[data-ctab],[data-preset],[data-delprod]');
+    if (!t) return;
+    if (t.dataset.close !== undefined) return closeOverlay(t.dataset.close);
+    if (t.dataset.enquire !== undefined) return openEnquiry(t.dataset.enquire, t);
+    if (t.dataset.pfilter !== undefined) { productFilter = t.dataset.pfilter; render({ animate: false }); $(`[data-pfilter="${CSS.escape(productFilter)}"]`)?.focus(); return; }
+    if (t.dataset.gfilter !== undefined) { galleryFilter = t.dataset.gfilter; render({ animate: false }); $(`[data-gfilter="${galleryFilter}"]`)?.focus(); return; }
+    if (t.dataset.lightbox !== undefined) return openLightbox(+t.dataset.lightbox, t);
+    if (t.id === 'menuBtn') { t.setAttribute('aria-expanded', 'true'); return openOverlay('mobileNav', t); }
+    if (t.id === 'customizerFab') { renderCustomizer(); return openOverlay('customizer', t); }
+    if (t.dataset.ctab) { custTab = t.dataset.ctab; return renderCustomizer(); }
+    if (t.dataset.preset) { config.accent = t.dataset.preset; commit(); renderCustomizer(); toast('Theme preset applied', PRESETS.find((p) => p.accent === config.accent)?.name || ''); return; }
+    if (t.dataset.delprod) {
+      const p = config.products.find((x) => x.id === t.dataset.delprod);
+      if (p && confirm(`Delete “${p.name}”?`)) { config.products = config.products.filter((x) => x.id !== p.id); commit(); renderCustomizer(); toast('Product deleted', p.name, 'info'); }
+    }
+  });
+
+  /* ------------------------------------------------------------------ *
+   *  Enquiry modal                                                      *
+   * ------------------------------------------------------------------ */
+  function openEnquiry(item, opener) {
+    closeOverlay('mobileNav');
+    const opts = [
+      ['', 'General enquiry'],
+      ...config.products.map((p) => [p.name, 'Product · ' + p.name]),
+      ...config.services.map((s) => [s.name, 'Service · ' + s.name]),
+      ['Wholesale / bulk order', 'Wholesale / bulk order'],
+    ];
+    $('#eqItem').innerHTML = opts.map(([v, l]) => `<option value="${esc(v)}" ${v === item ? 'selected' : ''}>${esc(l)}</option>`).join('');
+    $('#enquiryTitle').textContent = item ? `Enquire: ${item}` : 'Request a quote';
+    $('#eqError').classList.add('hidden');
+    $('#eqName').setAttribute('data-autofocus', '');
+    openOverlay('enquiryModal', opener);
+  }
+
+  function validate(form, errEl) {
+    const bad = $$('[required]', form).filter((f) => !f.value.trim() || (f.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value)));
+    $$('input,textarea', form).forEach((f) => { f.classList.remove('border-red-600'); f.removeAttribute('aria-invalid'); });
+    if (bad.length) {
+      bad.forEach((f) => { f.classList.add('border-red-600'); f.setAttribute('aria-invalid', 'true'); });
+      errEl.textContent = 'Please fill in: ' + bad.map((f) => $(`label[for="${f.id}"]`, form).childNodes[0].textContent.trim()).join(', ') + '.';
+      errEl.classList.remove('hidden');
+      bad[0].focus();
+      return false;
+    }
+    errEl.classList.add('hidden');
+    return true;
+  }
+
+  $('#enquiryForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = e.target;
+    if (!validate(f, $('#eqError'))) return;
+    const name = f.name.value.trim().split(' ')[0];
+    const item = f.item.value || 'your enquiry';
+    f.reset();
+    closeOverlay('enquiryModal');
+    toast(`Thanks, ${name}!`, `We’ve received your request about ${item} and will reply to you shortly from ${config.email}.`);
+  });
+
+  document.addEventListener('submit', (e) => {
+    if (e.target.id !== 'contactForm') return;
+    e.preventDefault();
+    const f = e.target;
+    if (!validate(f, $('#cError'))) return;
+    const name = f.name.value.trim().split(' ')[0];
+    f.reset();
+    toast(`Message sent — thank you, ${name}!`, `The ${config.name} team will get back to you within one business day.`);
+  });
+
+  /* ------------------------------------------------------------------ *
+   *  Lightbox                                                           *
+   * ------------------------------------------------------------------ */
+  let lbIndex = 0;
+  function showLightbox() {
+    const g = galleryList[lbIndex];
+    if (!g) return;
+    const im = $('#lbImg');
+    im.onerror = () => { im.onerror = null; im.src = placeholder(g.title); };
+    im.src = g.src.replace(/w=\d+/, 'w=1600');
+    im.alt = g.title;
+    $('#lbTitle').textContent = g.title;
+    $('#lbCount').textContent = `${lbIndex + 1} of ${galleryList.length} · ${g.cat}`;
+  }
+  function openLightbox(i, opener) { lbIndex = i; showLightbox(); openOverlay('lightbox', opener); }
+  function stepLightbox(d) { lbIndex = (lbIndex + d + galleryList.length) % galleryList.length; showLightbox(); }
+  $('#lbPrev').addEventListener('click', () => stepLightbox(-1));
+  $('#lbNext').addEventListener('click', () => stepLightbox(1));
+  // swipe support
+  let touchX = null;
+  $('#lightbox').addEventListener('touchstart', (e) => (touchX = e.touches[0].clientX), { passive: true });
+  $('#lightbox').addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) stepLightbox(dx < 0 ? 1 : -1);
+    touchX = null;
+  });
+
+  /* ------------------------------------------------------------------ *
+   *  Live customizer                                                    *
+   * ------------------------------------------------------------------ */
+  let custTab = 'brand';
+  let commitTimer;
+  function commit() { save(); render({ animate: false }); }
+  function commitSoon() { clearTimeout(commitTimer); commitTimer = setTimeout(commit, 250); }
+
+  const field = (key, label, type = 'text', rows = 0) => {
+    const v = esc(config[key]);
+    const cls = 'w-full rounded-xl border border-stone-300 px-3 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none';
+    return `<div>
+      <label for="cf-${key}" class="block text-sm font-medium mb-1.5">${label}</label>
+      ${rows ? `<textarea id="cf-${key}" data-cfg="${key}" rows="${rows}" class="${cls} py-2.5">${v}</textarea>`
+             : `<input id="cf-${key}" data-cfg="${key}" type="${type}" value="${v}" class="${cls} min-h-[44px]" />`}
+    </div>`;
+  };
+
+  function renderCustomizer() {
+    $$('#custTabs [data-ctab]').forEach((b) => {
+      const on = b.dataset.ctab === custTab;
+      b.setAttribute('aria-selected', on);
+      b.className = 'min-h-[40px] rounded-lg transition ' + (on ? 'bg-white shadow-soft text-espresso' : 'text-stone-600 hover:text-espresso');
+    });
+    const body = $('#custBody');
+    if (custTab === 'brand') {
+      body.innerHTML = `<div class="space-y-5">
+        ${field('name', 'Company name')}
+        ${field('tagline', 'Tagline / slogan')}
+        ${field('industry', 'Industry')}
+        ${field('description', 'Company description', 'text', 4)}
+        ${field('mission', 'Mission statement', 'text', 3)}
+        <div>
+          <p class="block text-sm font-medium mb-2">Brand accent colour</p>
+          <div class="flex items-center gap-3">
+            <input type="color" id="cf-accent" data-cfg="accent" value="${esc(config.accent)}" class="w-14 h-12 rounded-xl border border-stone-300 cursor-pointer p-1 bg-white" aria-label="Pick accent colour" />
+            <input type="text" id="cf-accentHex" value="${esc(config.accent)}" class="flex-1 min-h-[44px] rounded-xl border border-stone-300 px-3 font-mono uppercase" aria-label="Accent colour hex value" />
+          </div>
+        </div>
+        <div>
+          <p class="block text-sm font-medium mb-2">Theme presets</p>
+          <div class="grid grid-cols-2 gap-2">
+            ${PRESETS.map((p) => `<button type="button" data-preset="${p.accent}" class="min-h-[44px] flex items-center gap-2 px-3 rounded-xl border ${p.accent.toLowerCase() === config.accent.toLowerCase() ? 'border-espresso ring-2 ring-espresso/20' : 'border-stone-300 hover:border-espresso/40'} text-sm font-medium"><span class="w-5 h-5 rounded-full" style="background:${p.accent}" aria-hidden="true"></span>${p.name}</button>`).join('')}
+          </div>
+        </div>
+      </div>`;
+    } else if (custTab === 'contact') {
+      body.innerHTML = `<div class="space-y-5">
+        ${field('phone', 'Phone number', 'tel')}
+        ${field('email', 'Contact email', 'email')}
+        ${field('address', 'Business address', 'text', 2)}
+        <div>
+          <p class="text-sm font-medium mb-2">Opening hours</p>
+          <div class="space-y-2">
+            ${config.hours.map(([d, h], i) => `<div class="grid grid-cols-2 gap-2">
+              <input data-hour="${i}" data-part="0" value="${esc(d)}" aria-label="Day ${i + 1}" class="min-h-[44px] rounded-xl border border-stone-300 px-3 text-sm" />
+              <input data-hour="${i}" data-part="1" value="${esc(h)}" aria-label="Hours ${i + 1}" class="min-h-[44px] rounded-xl border border-stone-300 px-3 text-sm" />
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>`;
+    } else if (custTab === 'products') {
+      const cats = [...new Set(config.products.map((p) => p.category).concat(['Breads', 'Pastries', 'Handcrafted Homeware']))];
+      body.innerHTML = `
+        <h3 class="font-semibold">Current products (${config.products.length})</h3>
+        <ul class="mt-3 space-y-2">
+          ${config.products.map((p) => `<li class="flex items-center gap-3 p-2 rounded-xl border border-stone-200">
+            <span class="w-12 h-12 rounded-lg overflow-hidden bg-sand shrink-0">${img(p.image, p.name, 'w-full h-full object-cover')}</span>
+            <span class="flex-1 min-w-0"><span class="block font-medium truncate">${esc(p.name)}</span><span class="block text-xs text-stone-500">${esc(p.category)}</span></span>
+            <button type="button" data-delprod="${esc(p.id)}" class="w-11 h-11 rounded-lg text-red-700 hover:bg-red-50 grid place-items-center" aria-label="Delete ${esc(p.name)}"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button>
+          </li>`).join('') || '<li class="text-sm text-stone-500">No products.</li>'}
+        </ul>
+        <form id="addProduct" class="mt-6 pt-6 border-t border-stone-200 space-y-4">
+          <h3 class="font-semibold">Add a product</h3>
+          <div><label for="np-name" class="block text-sm font-medium mb-1.5">Name *</label><input id="np-name" required class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3" /></div>
+          <div><label for="np-cat" class="block text-sm font-medium mb-1.5">Category</label>
+            <input id="np-cat" list="np-cats" value="Breads" class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3" />
+            <datalist id="np-cats">${cats.map((c) => `<option value="${esc(c)}">`).join('')}</datalist></div>
+          <div><label for="np-desc" class="block text-sm font-medium mb-1.5">Description</label><textarea id="np-desc" rows="2" class="w-full rounded-xl border border-stone-300 px-3 py-2"></textarea></div>
+          <div><label for="np-img" class="block text-sm font-medium mb-1.5">Image URL</label><input id="np-img" type="url" placeholder="https://…" class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3" /></div>
+          <div><label for="np-badges" class="block text-sm font-medium mb-1.5">Badges (comma separated)</label><input id="np-badges" placeholder="Organic, New" class="w-full min-h-[44px] rounded-xl border border-stone-300 px-3" /></div>
+          <button type="submit" class="${btnPrimary} w-full"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add product</button>
+        </form>`;
+    } else {
+      const labels = { stats: 'Statistics / highlights', products: 'Featured products', why: 'Why choose us', services: 'Featured services', cta: 'Call-to-action banner' };
+      body.innerHTML = `
+        <h3 class="font-semibold">Home page sections</h3>
+        <p class="text-sm text-stone-600 mt-1">Toggle sections on or off.</p>
+        <div class="mt-4 space-y-2">
+          ${Object.entries(labels).map(([k, l]) => `
+            <label class="flex items-center justify-between gap-3 min-h-[52px] px-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-sand">
+              <span class="font-medium">${l}</span>
+              <input type="checkbox" data-section="${k}" ${config.sections[k] ? 'checked' : ''} class="w-5 h-5 accent-[rgb(var(--accent))]" />
+            </label>`).join('')}
+        </div>
+        <p class="text-sm text-stone-600 mt-6"><i class="fa-solid fa-circle-info mr-1" aria-hidden="true"></i> Changes are saved in this browser automatically.</p>`;
+    }
+  }
+
+  $('#custBody').addEventListener('input', (e) => {
+    const t = e.target;
+    if (t.dataset.cfg) {
+      config[t.dataset.cfg] = t.value;
+      if (t.id === 'cf-accent') $('#cf-accentHex').value = t.value;
+      t.dataset.cfg === 'accent' ? commit() : commitSoon();
+    } else if (t.id === 'cf-accentHex' && /^#?[0-9a-f]{6}$/i.test(t.value.trim())) {
+      config.accent = '#' + t.value.trim().replace('#', '');
+      $('#cf-accent').value = config.accent;
+      commit();
+    } else if (t.dataset.hour !== undefined) {
+      config.hours[+t.dataset.hour][+t.dataset.part] = t.value;
+      commitSoon();
+    }
+  });
+  $('#custBody').addEventListener('change', (e) => {
+    const t = e.target;
+    if (t.dataset.section) { config.sections[t.dataset.section] = t.checked; commit(); toast(`Section ${t.checked ? 'shown' : 'hidden'}`, '', 'info'); }
+    if (t.id === 'cf-accent') renderCustomizer();
+  });
+  $('#custBody').addEventListener('submit', (e) => {
+    if (e.target.id !== 'addProduct') return;
+    e.preventDefault();
+    const name = $('#np-name').value.trim();
+    if (!name) { $('#np-name').focus(); return toast('Product name required', '', 'error'); }
+    config.products.push({
+      id: 'p' + Date.now().toString(36),
+      name,
+      category: $('#np-cat').value.trim() || 'Other',
+      desc: $('#np-desc').value.trim() || 'Handcrafted with care.',
+      image: $('#np-img').value.trim(),
+      badges: $('#np-badges').value.split(',').map((s) => s.trim()).filter(Boolean),
+      specs: [],
+    });
+    commit();
+    renderCustomizer();
+    toast('Product added', name);
+    $('#np-name')?.focus();
+  });
+  $('#custReset').addEventListener('click', () => {
+    if (!confirm('Reset all business settings to the original defaults?')) return;
+    config = clone(DEFAULTS);
+    productFilter = 'All';
+    commit();
+    renderCustomizer();
+    toast('Settings reset', 'Original business information restored.', 'info');
+  });
+
+  /* ------------------------------------------------------------------ *
+   *  Boot                                                               *
+   * ------------------------------------------------------------------ */
+  if (!location.hash) history.replaceState(null, '', '#/home');
+  render();
+})();
+</script>
+</body>
+</html>
